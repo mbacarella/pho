@@ -1,9 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
-  <div class="jumbotron">
-    <h1>Welcome to phở</h1>
-    <p>Time to start building your site!</p>
-    <p><a class="btn btn-primary btn-lg" href="http://luminusweb.net">Learn more &raquo;</a></p>
-  </div>
+  {% for set in sets %}
+  <p>{{set|first}}</p>
+  {% endfor %}
 
+  
+  {% for photo in photos %}
+  {{photo}} 
+  {% endfor %}
 {% endblock %}
