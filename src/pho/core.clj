@@ -4,7 +4,7 @@
   (:gen-class))
 
 (defn parse-port [port]
-  (Integer/parseInt (or port (System/getenv "PORT") "3000")))
+  (Integer/parseInt (or port (System/getenv "PORT") "8080")))
 
 (defn -main [& [port]]
   (let [port (parse-port port)]
