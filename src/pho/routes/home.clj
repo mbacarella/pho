@@ -2,13 +2,23 @@
   (:require [pho.layout :as layout]
             [pho.tree :as tree]
             [compojure.core :refer [defroutes GET]]
+            [compojure.route :as route]
             [clojure.java.io :as io]))
 
-(defn home-page []
-  (let [[sets photos] (tree/get-sets-and-photos "/home/mbac/photos")]
+(def public-base "resources/public/photos")
+
+(defn view-photoset [path]
+  (let [[photosets photos] (tree/get-sets-and-photos public-base)]
     (layout/render "home.html"
-                   {:sets sets
+                   {:photosets photosets
                     :photos photos})))
 
+(defn home-page []
+  (view-photoset public-base))
+
+(defn set-page [setname]
+  (view-photoset (str public-base "/" setname)))
+
 (defroutes home-routes
-  (GET "/" [] (home-page)))
+  (GET "/" [] (home-page))
+  (GET ["/set/:setname" :setname #".*"] [setname] (set-page setname)))

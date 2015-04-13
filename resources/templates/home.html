@@ -1,11 +1,16 @@
 {% extends "base.html" %}
 {% block content %}
-  {% for set in sets %}
-  <p>{{set|first}}</p>
+
+  {% for photoset in photosets %}
+  <p><h2><a href="/set/{{photoset.url}}">{{photoset.name}}</a></h2>
+    {% for photo in photoset.preview %}
+    <img src="{{photo.url}}" width=150>
+    {% endfor %}
+  </p>
+  {% endfor %}
+  <hr />
+  {% for photo in photos %}
+  <img src="{{photo.path}}" width=150>
   {% endfor %}
 
-  
-  {% for photo in photos %}
-  {{photo}} 
-  {% endfor %}
 {% endblock %}
