@@ -16,9 +16,17 @@
 (defn home-page []
   (view-photoset public-base))
 
+(defn get-thumb [path]
+  ;; XXX: validate path doesn't have ..
+  ;; XXX: dynamically resize path on the fly
+  ;; XXX: add caching later
+  )
+
 (defn set-page [setname]
+  ;; XXX: validate setname doesn't have ..
   (view-photoset (str public-base "/" setname)))
 
 (defroutes home-routes
   (GET "/" [] (home-page))
+  (GET ["/thumb/:thumbpath" :thumbpath #".*"] [thumbpath] (get-thumb thumbpath))
   (GET ["/set/:setname" :setname #".*"] [setname] (set-page setname)))

@@ -4,14 +4,19 @@
 
 (defn path-to-url [path]
   ;; strip up to and including 'public'
-  (clojure.string/replace path #"^.*public" ""))
+  (clojure.string/replace path #"^.*public/photos/" ""))
 
 (defrecord Photo [name url path])
 (defrecord Photoset [name url path photos preview])
 
-;; XXX: filter things without a .jpg, .gif, .png extension. maybe
 (defn is-photo [file]
-  (.isFile file))
+  (and (.isFile file)
+       (let [lfile (clojure.string/lower-case file)
+             ew    (fn [suffix] (.endsWith lfile suffix))]
+         (or (ew ".jpg")
+             (ew ".jpeg")
+             (ew ".gif")
+             (ew ".png")))))
 
 (defn ls [path]
   (.listFiles (File. path)))
