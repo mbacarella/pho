@@ -9,7 +9,7 @@
 (def public-base "resources/public")
 (def photos-base (str public-base "/photos"))
 ;; on my box, thumbs-base is a symlink to /var/tmp
-(def thumbs-base (str thumbs-base "/thumbs"))
+(def thumbs-base (str public-base "/thumbs"))
 
 (defrecord Breadcrumb [name url])
 
@@ -43,7 +43,7 @@
     (if (not (.exists (java.io.File. thumb-path)))
       (let [orig-path (str photos-base "/" path)]
         (make-containing-dirs orig-path)
-        (thumb/convert-to-png-and-resize (str photos-base "/" path) 300)))
+        (thumb/convert-to-png-and-resize (str photos-base "/" path) thumb-path 300)))
     (ring.util.response/redirect (str "/thumbs" path))))
 
 ;; XXX: validate setname doesn't have ".."
