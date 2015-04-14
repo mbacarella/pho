@@ -39,7 +39,7 @@
 (defn thumb-gen [path]
   (let [thumb-path (str thumbs-base "/" path)]
     ;; populate thumb cache if doesn't exist yet
-    (if (not (.exists (java.io/File. thumb-path)))
+    (if (not (.exists (java.io.File. thumb-path)))
       (let [orig-path (str photos-base "/" path)]
         (make-containing-dirs orig-path)
         (convert-to-png-and-resize (str photos-base "/" path) 300)))
