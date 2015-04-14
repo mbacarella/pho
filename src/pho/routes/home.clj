@@ -25,7 +25,6 @@
 (defn make-containing-dirs [path]
   (let [parts   (clojure.string/split path #"/")
         dirname (clojure.string/join "/" (take (- (count parts) 1) parts))]
-    (info "/bin/mkdir -p" dirname)
     (clojure.java.shell/sh "/bin/mkdir" "-p" "--" dirname)))
     
 ;; XXX: validate setname and path don't have ".."
@@ -41,15 +40,13 @@
 
 ;; XXX: validate path doesn't have ".."
 (defn thumb-gen [path]
-  (info "== thumb-gen: " path)
-  (let [thumb-path (str thumbs-base "/" path)]
+  (let [thumb-path (str thumbs-base "/" path ".png")]
     ;; populate thumb cache if doesn't exist yet
     (if (not (.exists (java.io.File. thumb-path)))
       (let [orig-path (str photos-base "/" path)]
         (make-containing-dirs thumb-path)
-        (info "== convert-to-png-and-resize: " orig-path thumb-path)
-        (thumb/convert-to-png-and-resize orig-path thumb-path 300)))
-    (ring.util.response/redirect (str "/thumbs/" path))))
+        (thumb/convert-to-png-and-resize orig-path thumb-path 200)))
+    (ring.util.response/redirect (str "/thumbs/" path ".png"))))
 
 ;; XXX: validate setname doesn't have ".."
 (defn set-page [setname]
