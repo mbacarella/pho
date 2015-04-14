@@ -5,28 +5,51 @@
             [compojure.route :as route]
             [clojure.java.io :as io]))
 
-(def public-base "resources/public/photos")
+(def public-base "resources/public")
+(def photos-base (str public-base "/photos"))
+;; on my box, thumbs-base is a symlink to /var/tmp
+(def thumbs-base (str thumbs-base "/thumbs"))
 
-(defn view-photoset [path]
-  (let [[photosets photos] (tree/get-sets-and-photos public-base)]
+(defrecord Breadcrumb [name url])
+
+(defn breadcrumbs-of-setname [setname]
+  (second (reduce (fn [[base-url acc] name]
+                    (let [url (str base-url "/" name)]
+                      [url (conj acc (Breadcrumb. name url))]))
+                  ["" []]
+                  (filter (fn [x] (not (= "" x))) (clojure.string/split setname #"/")))))
+
+(defn make-containing-dirs [path]
+  (let [parts   (clojure.string/split path #"/")
+        dirname (clojure.string/join "/" (take (- (count parts) 1) parts))]
+    (clojure.java.shell/sh "/bin/mkdir" "-p" "--" dirname)))
+    
+;; XXX: validate setname and path don't have ".."
+(defn view-photoset [setname path]
+  (let [[photosets photos] (tree/get-sets-and-photos path)]
     (layout/render "home.html"
-                   {:photosets photosets
+                   {:breadcrumbs (breadcrumbs-of-setname setname)
+                    :photosets photosets
                     :photos photos})))
 
 (defn home-page []
-  (view-photoset public-base))
+  (view-photoset "" photos-base))
 
-(defn get-thumb [path]
-  ;; XXX: validate path doesn't have ..
-  ;; XXX: dynamically resize path on the fly
-  ;; XXX: add caching later
-  )
+;; XXX: validate path doesn't have ".."
+(defn thumb-gen [path]
+  (let [thumb-path (str thumbs-base "/" path)]
+    ;; populate thumb cache if doesn't exist yet
+    (if (not (.exists (java.io/File. thumb-path)))
+      (let [orig-path (str photos-base "/" path)]
+        (make-containing-dirs orig-path)
+        (convert-to-png-and-resize (str photos-base "/" path) 300)))
+    (ring.util.response/redirect (str "/thumbs" path))))
 
+;; XXX: validate setname doesn't have ".."
 (defn set-page [setname]
-  ;; XXX: validate setname doesn't have ..
-  (view-photoset (str public-base "/" setname)))
+  (view-photoset setname (str photos-base "/" setname)))
 
 (defroutes home-routes
   (GET "/" [] (home-page))
-  (GET ["/thumb/:thumbpath" :thumbpath #".*"] [thumbpath] (get-thumb thumbpath))
-  (GET ["/set/:setname" :setname #".*"] [setname] (set-page setname)))
+  (GET ["/set/:setname" :setname #".*"] [setname] (set-page setname))
+  (GET ["/thumb-gen/:thumbpath" :thumbpath #".*"] [thumbpath] (thumb-gen thumbpath)))

@@ -4,13 +4,13 @@
   {% for photoset in photosets %}
   <p><h2><a href="/set/{{photoset.url}}">{{photoset.name}}</a></h2>
     {% for photo in photoset.preview %}
-    <a href="/photos/{{photo.url}}"><img src="/thumb/{{photo.url}}"></a>
+    <a href="/photos/{{photo.url}}"><img src="/thumb-gen/{{photo.url}}"></a>
     {% endfor %}
   </p>
   {% endfor %}
   <hr />
   {% for photo in photos %}
-  <a href="/photos/{{photo.url}}"><img src="/thumb/{{photo.url}}"></a>
+  <a href="/photos/{{photo.url}}"><img src="/thumb-gen/{{photo.url}}"></a>
   {% endfor %}
 
 {% endblock %}

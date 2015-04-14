@@ -12,16 +12,11 @@
           <a class="navbar-brand" href="{{servlet-context}}/">phở</a>
         </div>
         <div class="navbar-collapse collapse ">
-<!--
-          <ul class="nav navbar-nav">
-            <li {% ifequal page "home.html" %} class="active"{%endifequal%}>
-              <a href="{{servlet-context}}/">Home</a>
-            </li>
-            <li {% ifequal page "about.html" %} class="active"{%endifequal%}>
-              <a href="{{servlet-context}}/about">About</a>
-            </li>
-          </ul>
--->
+	  <ul class="nav navbar-nav">
+	    {% for breadcrumb in breadcrumbs %}
+	    <li><a href="/set{{ breadcrumb.url }}">{{ breadcrumb.name }}</a></li>
+	    {% endfor %}
+	  </ul>
         </div>
       </div>
     </div>
