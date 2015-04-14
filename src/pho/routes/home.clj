@@ -1,6 +1,7 @@
 (ns pho.routes.home
   (:require [pho.layout :as layout]
             [pho.tree :as tree]
+            [pho.thumbs :as thumbs]
             [compojure.core :refer [defroutes GET]]
             [compojure.route :as route]
             [clojure.java.io :as io]))
@@ -42,7 +43,7 @@
     (if (not (.exists (java.io.File. thumb-path)))
       (let [orig-path (str photos-base "/" path)]
         (make-containing-dirs orig-path)
-        (convert-to-png-and-resize (str photos-base "/" path) 300)))
+        (thumbs/convert-to-png-and-resize (str photos-base "/" path) 300)))
     (ring.util.response/redirect (str "/thumbs" path))))
 
 ;; XXX: validate setname doesn't have ".."
