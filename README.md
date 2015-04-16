@@ -1,6 +1,13 @@
 # pho
 
-FIXME
+phở is a Clojure Luminus webapp that will dynamically thumbnail and serve your photo directory.
+
+Make two symlinks:
+
+  resources/public/photos -> your photo directory
+  resources/public/thumbs -> /var/tmp
+
+I use /var/tmp so that the thumbnails get thrown away after 30 days by tmpwatch.
 
 ## Prerequisites
 
@@ -16,4 +23,7 @@ To start a web server for the application, run:
 
 ## License
 
-Copyright © 2015 FIXME
+Copyright © 2015 Michael Bacarella
+
+GPL
+
