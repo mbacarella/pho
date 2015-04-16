@@ -2,6 +2,7 @@
   (:require [pho.layout :as layout]
             [pho.tree :as tree]
             [pho.thumb :as thumb]
+            [pho.cmd :as cmd]
             [compojure.core :refer [defroutes GET]]
             [compojure.route :as route]
             [clojure.java.io :as io]
@@ -25,7 +26,7 @@
 (defn make-containing-dirs [path]
   (let [parts   (clojure.string/split path #"/")
         dirname (clojure.string/join "/" (take (- (count parts) 1) parts))]
-    (clojure.java.shell/sh "/bin/mkdir" "-p" "--" dirname)))
+    (cmd/exec ["/bin/mkdir" "-p" "--" dirname ])))
 
 (defn abort-on-path-trickery [s]
   (if (.contains s "..")

@@ -1,5 +1,6 @@
 (ns pho.thumb
-  (:require [clojure.java.io :as io])
+  (:require [clojure.java.io :as io]
+            [pho.cmd :as cmd])
   (:import  [javax.imageio.ImageIO]
             [java.awt.image.BufferedImage]))
 
@@ -16,9 +17,9 @@
     (javax.imageio.ImageIO/write simg "png" (io/file file-out))))
 
 (defn convert-to-jpg-and-resize-shellout [file-in file-out new-width]
-  (clojure.java.shell/sh "/usr/bin/convert"
-                         "-resize"
-                         (str new-width)
-                         "--"
-                         file-in
-                         file-out))
+  (cmd/exec [ "/usr/bin/convert"
+              "-resize"
+              (str new-width)
+              "--"
+              file-in
+              file-out ]))
