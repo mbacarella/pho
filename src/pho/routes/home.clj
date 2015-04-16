@@ -47,10 +47,10 @@
   (abort-on-path-trickery path)
   (let [orig-path (str photos-base "/" path)
         thumb-path (str thumbs-base "/" path ".png")]
-    (if (not (.exists (java.io.FIle. orig-path)))
+    (if (not (.exists (io/file orig-path)))
       (throw (Exception. "original photo does not exist")))
     ;; populate thumb cache if doesn't exist yet
-    (if (not (.exists (java.io.File. thumb-path)))
+    (if (not (.exists (io/file thumb-path)))
       (make-containing-dirs thumb-path)
       (thumb/convert-to-png-and-resize orig-path thumb-path 200))
     (ring.util.response/redirect (str "/thumbs/" path ".png"))))
