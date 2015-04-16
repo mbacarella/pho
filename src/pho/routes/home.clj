@@ -20,7 +20,7 @@
                     (let [url (str base-url "/" name)]
                       [url (conj acc (Breadcrumb. name url))]))
                   ["" []]
-                  (filter (fn [x] (not (= "" x))) (clojure.string/split setname #"/")))))
+                  (filter #(not (= "" %)) (clojure.string/split setname #"/")))))
 
 (defn make-containing-dirs [path]
   (let [parts   (clojure.string/split path #"/")
