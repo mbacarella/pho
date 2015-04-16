@@ -5,9 +5,11 @@ phở is a Clojure Luminus webapp that will dynamically thumbnail and serve your
 Make two symlinks:
 
   - resources/public/photos -> your photo directory
-  - resources/public/thumbs -> /var/tmp
+  - resources/public/thumbs -> /var/tmp/thumbs
 
-I use /var/tmp so that the thumbnails get thrown away after 30 days by tmpwatch.
+I use /var/tmp/thumbs so that the thumbnails get thrown away after 30 days by tmpwatch.
+
+Run ring-server or deploy to Tomcat.  Fin.
 
 ## Prerequisites
 

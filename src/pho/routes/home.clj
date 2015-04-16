@@ -10,7 +10,7 @@
 
 (def public-base "resources/public")
 (def photos-base (str public-base "/photos"))
-;; on my box, thumbs-base is a symlink to /var/tmp
+;; on my box, thumbs-base is a symlink to /var/tmp/thumbs
 (def thumbs-base (str public-base "/thumbs"))
 
 (defrecord Breadcrumb [name url])
@@ -26,9 +26,14 @@
   (let [parts   (clojure.string/split path #"/")
         dirname (clojure.string/join "/" (take (- (count parts) 1) parts))]
     (clojure.java.shell/sh "/bin/mkdir" "-p" "--" dirname)))
-    
-;; XXX: validate setname and path don't have ".."
+
+(defn abort-on-path-trickery [s]
+  (if (.contains s "..")
+    (throw (Exception. "pathname trickery detected"))))
+
 (defn view-photoset [setname path]
+  (abort-on-pathname-trickery setname)
+  (abort-on-pathname-trickery path)
   (let [[photosets photos] (tree/get-sets-and-photos path)]
     (layout/render "home.html"
                    {:breadcrumbs (breadcrumbs-of-setname setname)
@@ -38,8 +43,8 @@
 (defn home-page []
   (view-photoset "" photos-base))
 
-;; XXX: validate path doesn't have ".."
 (defn thumb-gen [path]
+  (abort-on-pathname-trickery path)
   (let [thumb-path (str thumbs-base "/" path ".png")]
     ;; populate thumb cache if doesn't exist yet
     (if (not (.exists (java.io.File. thumb-path)))
@@ -48,8 +53,8 @@
         (thumb/convert-to-png-and-resize orig-path thumb-path 200)))
     (ring.util.response/redirect (str "/thumbs/" path ".png"))))
 
-;; XXX: validate setname doesn't have ".."
 (defn set-page [setname]
+  (abort-on-pathname-trickery setname)
   (view-photoset setname (str photos-base "/" setname)))
 
 (defroutes home-routes
