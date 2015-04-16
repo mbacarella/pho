@@ -9,7 +9,12 @@ Make two symlinks:
 
 I use /var/tmp/thumbs so that the thumbnails get thrown away after 30 days by tmpwatch.
 
-Run ring-server or deploy to Tomcat.  Fin.
+Run 'lein ring server-headless' or deploy to Tomcat.  Fin.
+
+## TODO
+
+  - It's probably needlessly slow, serving images through the ring server
+  - Make the tomcat deploy actually work.
 
 ## Prerequisites
 
