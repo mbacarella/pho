@@ -3,7 +3,7 @@
   (:import  [javax.imageio.ImageIO]
             [java.awt.image.BufferedImage]))
 
-(defn convert-to-png-and-resize [file-in file-out new-width]
+(defn convert-to-png-and-resize-native [file-in file-out new-width]
   (let [img         (javax.imageio.ImageIO/read (io/file file-in))
         orig-width  (.getWidth img)
         orig-height (.getHeight img)
@@ -14,3 +14,11 @@
     (.drawImage g img 0 0 new-width new-height nil)
     (.dispose g)
     (javax.imageio.ImageIO/write simg "png" (io/file file-out))))
+
+(defn convert-to-jpg-and-resize-shellout [file-in file-out new-width]
+  (clojure.java.shell/sh "/usr/bin/convert"
+                         "-resize"
+                         (str new-width)
+                         "--"
+                         file-in
+                         file-out))
