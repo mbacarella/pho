@@ -11,7 +11,6 @@
 
 (def public-base "resources/public")
 (def photos-base (str public-base "/photos"))
-;; on my box, thumbs-base is a symlink to /var/tmp/thumbs
 (def thumbs-base (str public-base "/thumbs"))
 
 (defrecord Breadcrumb [name url])
