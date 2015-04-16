@@ -29,11 +29,11 @@
 
 (defn abort-on-path-trickery [s]
   (if (.contains s "..")
-    (throw (Exception. "pathname trickery detected"))))
+    (throw (Exception. "path trickery detected"))))
 
 (defn view-photoset [setname path]
-  (abort-on-pathname-trickery setname)
-  (abort-on-pathname-trickery path)
+  (abort-on-path-trickery setname)
+  (abort-on-path-trickery path)
   (let [[photosets photos] (tree/get-sets-and-photos path)]
     (layout/render "home.html"
                    {:breadcrumbs (breadcrumbs-of-setname setname)
@@ -44,7 +44,7 @@
   (view-photoset "" photos-base))
 
 (defn thumb-gen [path]
-  (abort-on-pathname-trickery path)
+  (abort-on-path-trickery path)
   (let [thumb-path (str thumbs-base "/" path ".png")]
     ;; populate thumb cache if doesn't exist yet
     (if (not (.exists (java.io.File. thumb-path)))
@@ -54,7 +54,7 @@
     (ring.util.response/redirect (str "/thumbs/" path ".png"))))
 
 (defn set-page [setname]
-  (abort-on-pathname-trickery setname)
+  (abort-on-path-trickery setname)
   (view-photoset setname (str photos-base "/" setname)))
 
 (defroutes home-routes
