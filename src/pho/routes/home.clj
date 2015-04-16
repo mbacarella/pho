@@ -45,15 +45,16 @@
 
 (defn thumb-gen [path]
   (abort-on-path-trickery path)
-  (let [orig-path (str photos-base "/" path)
-        thumb-path (str thumbs-base "/" path ".png")]
+  (let [ext        ".t.jpg"
+        orig-path  (str photos-base "/" path)
+        thumb-path (str thumbs-base "/" path ext)]
     (if (not (.exists (io/file orig-path)))
       (throw (Exception. "original photo does not exist")))
     ;; populate thumb cache if doesn't exist yet
     (if (not (.exists (io/file thumb-path)))
       (do (make-containing-dirs thumb-path)
           (thumb/convert-to-jpg-and-resize-shellout orig-path thumb-path 200)))
-    (ring.util.response/redirect (str "/thumbs/" path ".t.jpg"))))
+    (ring.util.response/redirect (str "/thumbs/" path ext))))
 
 (defn set-page [setname]
   (abort-on-path-trickery setname)
