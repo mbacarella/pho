@@ -11,8 +11,9 @@ Run 'lein ring server-headless' or deploy to Tomcat.  Fin.
 
 ## TODO
 
-  - It's probably needlessly slow, serving images through the ring server
+  - It's probably needlessly slow, serving images through the ring server.  Need a place where we can serve static content.
   - Make the tomcat deploy actually work.
+  - Dynamically resizing all photos, even once, is too slow.  Need a 'make' step after changes.
 
 ## Prerequisites
 
